@@ -10,7 +10,7 @@ class Feedback extends Model
     use HasFactory;
 
     // 👇 This tells Laravel to use the "feedback" table
-    protected $table = 'feedback';
+    protected $table = 'feedbacks';
 
     protected $fillable = ['user_id', 'message'];
 
