@@ -5,10 +5,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\AdminManagementController;
 use App\Http\Controllers\FeedbackController;
-use App\Http\Controllers\AdminController; // ✅ Don't forget this
+use App\Http\Controllers\AdminController;
 
 // ---------------------------
-// Public Routes
+// Public Routes (Guest)
 // ---------------------------
 Route::get('/', fn() => view('welcome'))->name('welcome');
 
@@ -27,18 +27,17 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/submit-complaint', [ComplaintController::class, 'store'])->name('submit-complaint');
     Route::get('/complaint-history', [ComplaintController::class, 'history'])->name('complaint.history');
 
-    // 💬 Feedback
+    // 💬 Feedback Routes
     Route::get('/feedback', fn() => view('feedback'))->name('feedback');
     Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.submit');
 
-    // 🧑‍💼 Admin Dashboards
+    // 🧑‍💼 Department Admin Dashboards
     Route::get('/admin/env-police', [ComplaintController::class, 'envPoliceDashboard'])->name('admin.env');
     Route::get('/admin/municipal', [ComplaintController::class, 'municipalDashboard'])->name('admin.municipal');
     Route::get('/admin/division-office', [ComplaintController::class, 'divisionOfficeDashboard'])->name('admin.division');
 
-    // 👑 Super Admin Panel
+    // 👑 Super Admin Routes
     Route::prefix('admin')->name('admin.')->group(function () {
-        // Admin management
         Route::get('/manage', [AdminManagementController::class, 'index'])->name('manage');
         Route::post('/create', [AdminManagementController::class, 'store'])->name('create');
         Route::get('/{id}/edit', [AdminManagementController::class, 'edit'])->name('edit');
@@ -50,16 +49,25 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/all-feedbacks', [AdminController::class, 'allFeedbacks'])->name('all-feedbacks');
     });
 
-    // 👤 Profile
+    // 👤 Profile Management
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::put('/admin/complaints/{id}/update-status', [\App\Http\Controllers\ComplaintController::class, 'updateStatus'])->name('admin.update-status');
+    Route::get('/admin/complaints/{id}', [ComplaintController::class, 'show'])->name('admin.complaints.show');
+
+
 });
 
-// Breeze Dashboard fallback
+// ---------------------------
+// Breeze Default Dashboard
+// ---------------------------
 Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-// Breeze Auth scaffolding
+// ---------------------------
+// Laravel Breeze Auth Routes
+// ---------------------------
 require __DIR__.'/auth.php';

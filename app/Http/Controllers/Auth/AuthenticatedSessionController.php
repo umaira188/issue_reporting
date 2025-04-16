@@ -29,9 +29,6 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::user();
 
-        // Flash message (optional)
-        session()->flash('message', 'Welcome back, ' . $user->name . '!');
-
         // Role-based redirection
         if ($user->role === 'env_police') {
             return redirect()->intended('/admin/env-police');
@@ -44,14 +41,14 @@ class AuthenticatedSessionController extends Controller
         if ($user->role === 'division_office') {
             return redirect()->intended('/admin/division-office');
         }
+
         if ($user->role === 'super_admin') {
             return redirect()->intended('/admin/manage');
         }
-        
 
-        // Default for normal users
         return redirect()->intended('/lodge-complaint');
     }
+
 
 
     /**

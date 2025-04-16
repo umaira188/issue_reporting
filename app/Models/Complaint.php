@@ -13,16 +13,27 @@ class Complaint extends Model
         'issue_id',
         'user_id',
         'category',
-        'department', // if you’re using this column
+        'department', // Optional: if you're using this
         'address',
         'details',
         'image',
-        'status'
+        'status',
     ];
 
-    // 👇 Relationship to the user who submitted the complaint
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+
+    // Complaint belongs to a user
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    // Complaint has many status updates
+    public function statusLogs()
+    {
+        return $this->hasMany(ComplaintStatusLog::class)->orderBy('changed_at');
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Complaint;
+use App\Models\ComplaintStatusLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -20,21 +21,21 @@ class ComplaintController extends Controller
             'image' => 'nullable|image|max:2048'
         ]);
 
-        // Generate issue ID
         $prefixes = [
             'road' => 'RMI',
             'lighting' => 'SLI',
             'water' => 'WTR',
             'garbage' => 'GRB',
         ];
+
         $prefix = $prefixes[$request->issueType] ?? 'GEN';
-        $issueId = $prefix . '-' . rand(100, 999) . strtoupper(Str::random(2));
+        $issueId = $prefix . '-' . strtoupper(Str::random(4)) . '-' . now()->format('His');
 
-        // Upload image
-        $imagePath = $request->hasFile('image') ?
-            $request->file('image')->store('complaints', 'public') : null;
 
-        // Save complaint
+        $imagePath = $request->hasFile('image')
+            ? $request->file('image')->store('complaints', 'public')
+            : null;
+
         $complaint = Complaint::create([
             'issue_id' => $issueId,
             'user_id' => Auth::id(),
@@ -42,28 +43,59 @@ class ComplaintController extends Controller
             'address' => $request->address,
             'details' => $request->details,
             'image' => $imagePath,
-            'status' => 'pending',
+            'status' => 'Received',
         ]);
 
-        // Send email
+        ComplaintStatusLog::create([
+            'complaint_id' => $complaint->id,
+            'status' => 'Received',
+            'changed_at' => now(),
+            'changed_by' => Auth::id(),
+        ]);
+
         Mail::to(Auth::user()->email)->queue(new ComplaintSubmitted($complaint));
 
         return redirect()->back()->with('success', 'Complaint submitted successfully. Your Issue ID: ' . $issueId);
     }
-    public function municipalDashboard() {
+
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'status' => 'required|in:Received,Assigned,Work Started,In Progress,Completed,Closed'
+        ]);
+
+        $complaint = Complaint::findOrFail($id);
+        $complaint->status = $request->status;
+        $complaint->save();
+
+        ComplaintStatusLog::create([
+            'complaint_id' => $complaint->id,
+            'status' => $request->status,
+            'changed_at' => now(),
+            'changed_by' => auth()->id(),
+        ]);
+
+        return back()->with('success', 'Complaint status updated successfully.');
+    }
+
+    public function municipalDashboard()
+    {
         $complaints = Complaint::whereIn('category', ['road', 'lighting'])->get();
         return view('admin.municipal', compact('complaints'));
     }
-    
-    public function envPoliceDashboard() {
+
+    public function envPoliceDashboard()
+    {
         $complaints = Complaint::where('category', 'garbage')->get();
         return view('admin.env', compact('complaints'));
     }
-    
-    public function divisionOfficeDashboard() {
+
+    public function divisionOfficeDashboard()
+    {
         $complaints = Complaint::whereIn('category', ['water', 'garbage'])->get();
         return view('admin.division', compact('complaints'));
     }
+
     public function history()
     {
         $userId = auth()->id();
@@ -71,6 +103,9 @@ class ComplaintController extends Controller
 
         return view('complaint-history', compact('complaints'));
     }
-
-    
+    public function show($id)
+{
+    $complaint = Complaint::with('user')->findOrFail($id);
+    return view('admin.complaint-details', compact('complaint'));
+}
 }

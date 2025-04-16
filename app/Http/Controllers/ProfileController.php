@@ -26,6 +26,10 @@ class ProfileController extends Controller
      */
     public function update(ProfileUpdateRequest $request): RedirectResponse
     {
+        if (Auth::user()->role !== 'user') {
+            return back()->with('error', 'Only regular users can update their profile.');
+        }
+
         $request->user()->fill($request->validated());
 
         if ($request->user()->isDirty('email')) {
@@ -42,6 +46,10 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        if (Auth::user()->role !== 'user') {
+            return back()->with('error', 'Only regular users can delete their account.');
+        }
+
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
         ]);
