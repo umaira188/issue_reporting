@@ -16,9 +16,7 @@
         </div>
         <nav>
             <ul class="nav-list">
-                <li><a href="{{ url('/') }}" class="nav-link">Dashboard</a></li>
-                
-                <li><a href="{{ url('/track-complaint') }}" class="nav-link">Track a Complaint</a></li>
+                <li><a href="{{ url('/') }}" class="nav-link">Home</a></li>
                 <li><a href="{{ url('/login') }}" class="nav-link">Login</a></li>
             </ul>
         </nav>
@@ -38,7 +36,7 @@
             <span class="highlight">E</span>ffortless
         </p>
         <div class="button-container">
-            <a href="{{ route('register') }}" class="btn">Lodge a Complaint</a>  <!-- Updated to registration -->
+            <a href="{{ route('register') }}" class="btn">Lodge a Complaint</a> 
             <a href="{{ url('/track-complaint') }}" class="btn">Track a Complaint</a>
         </div>
     </main>

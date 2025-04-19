@@ -7,11 +7,13 @@ use App\Models\ComplaintStatusLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\ComplaintSubmitted;
 use Illuminate\Support\Str;
+use App\Mail\ComplaintSubmitted;
+use App\Mail\ComplaintStatusUpdated;
 
 class ComplaintController extends Controller
 {
+    // 📝 Store a new complaint
     public function store(Request $request)
     {
         $request->validate([
@@ -31,7 +33,6 @@ class ComplaintController extends Controller
         $prefix = $prefixes[$request->issueType] ?? 'GEN';
         $issueId = $prefix . '-' . strtoupper(Str::random(4)) . '-' . now()->format('His');
 
-
         $imagePath = $request->hasFile('image')
             ? $request->file('image')->store('complaints', 'public')
             : null;
@@ -46,6 +47,7 @@ class ComplaintController extends Controller
             'status' => 'Received',
         ]);
 
+        // Log initial status
         ComplaintStatusLog::create([
             'complaint_id' => $complaint->id,
             'status' => 'Received',
@@ -53,21 +55,24 @@ class ComplaintController extends Controller
             'changed_by' => Auth::id(),
         ]);
 
-        Mail::to(Auth::user()->email)->queue(new ComplaintSubmitted($complaint));
+        // Send submission email
+        Mail::to(Auth::user()->email)->send(new ComplaintSubmitted($complaint));
 
         return redirect()->back()->with('success', 'Complaint submitted successfully. Your Issue ID: ' . $issueId);
     }
 
+    // ✅ Admin updates complaint status
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
             'status' => 'required|in:Received,Assigned,Work Started,In Progress,Completed,Closed'
         ]);
 
-        $complaint = Complaint::findOrFail($id);
+        $complaint = Complaint::with('user')->findOrFail($id);
         $complaint->status = $request->status;
         $complaint->save();
 
+        // Log new status
         ComplaintStatusLog::create([
             'complaint_id' => $complaint->id,
             'status' => $request->status,
@@ -75,7 +80,26 @@ class ComplaintController extends Controller
             'changed_by' => auth()->id(),
         ]);
 
-        return back()->with('success', 'Complaint status updated successfully.');
+        // Send status update email
+        Mail::to($complaint->user->email)->send(new ComplaintStatusUpdated($complaint, $request->status));
+
+        return back()->with('success', 'Complaint status updated and user notified.');
+    }
+
+    // 👤 User complaint history
+    public function history()
+    {
+        $userId = auth()->id();
+        $complaints = Complaint::where('user_id', $userId)->orderBy('created_at', 'desc')->get();
+
+        return view('complaint-history', compact('complaints'));
+    }
+
+    // 🏢 Admin Dashboards
+    public function envPoliceDashboard()
+    {
+        $complaints = Complaint::where('category', 'garbage')->get();
+        return view('admin.env', compact('complaints'));
     }
 
     public function municipalDashboard()
@@ -84,28 +108,16 @@ class ComplaintController extends Controller
         return view('admin.municipal', compact('complaints'));
     }
 
-    public function envPoliceDashboard()
-    {
-        $complaints = Complaint::where('category', 'garbage')->get();
-        return view('admin.env', compact('complaints'));
-    }
-
     public function divisionOfficeDashboard()
     {
         $complaints = Complaint::whereIn('category', ['water', 'garbage'])->get();
         return view('admin.division', compact('complaints'));
     }
 
-    public function history()
-    {
-        $userId = auth()->id();
-        $complaints = Complaint::where('user_id', $userId)->orderBy('created_at', 'desc')->get();
-
-        return view('complaint-history', compact('complaints'));
-    }
+    // 🕵️ Admin views complaint detail
     public function show($id)
-{
-    $complaint = Complaint::with('user')->findOrFail($id);
-    return view('admin.complaint-details', compact('complaint'));
-}
+    {
+        $complaint = Complaint::with('user')->findOrFail($id);
+        return view('admin.complaint-details', compact('complaint'));
+    }
 }

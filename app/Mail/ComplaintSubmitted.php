@@ -11,11 +11,17 @@ class ComplaintSubmitted extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public Complaint $complaint) {}
+    public Complaint $complaint;
+
+    public function __construct(Complaint $complaint)
+    {
+        $this->complaint = $complaint;
+    }
 
     public function build()
     {
-        return $this->markdown('emails.complaint')
-                    ->subject('Complaint Received');
+        return $this->subject('Complaint Submitted Successfully')
+        ->markdown('emails.complaint.submitted');
+
     }
 }
