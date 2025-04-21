@@ -16,6 +16,9 @@ Route::middleware('guest')->group(function () {
     Route::get('/login', fn() => view('auth.login'))->name('login');
     Route::get('/register', fn() => view('auth.register'))->name('register');
 });
+Route::get('/track-complaint', [\App\Http\Controllers\ComplaintController::class, 'trackForm'])->name('complaint.track.form');
+Route::post('/track-complaint', [\App\Http\Controllers\ComplaintController::class, 'track'])->name('complaint.track');
+
 
 // ---------------------------
 // Authenticated Routes

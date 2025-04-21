@@ -47,7 +47,6 @@ class ComplaintController extends Controller
             'status' => 'Received',
         ]);
 
-        // Log initial status
         ComplaintStatusLog::create([
             'complaint_id' => $complaint->id,
             'status' => 'Received',
@@ -55,7 +54,6 @@ class ComplaintController extends Controller
             'changed_by' => Auth::id(),
         ]);
 
-        // Send submission email
         Mail::to(Auth::user()->email)->send(new ComplaintSubmitted($complaint));
 
         return redirect()->back()->with('success', 'Complaint submitted successfully. Your Issue ID: ' . $issueId);
@@ -72,7 +70,6 @@ class ComplaintController extends Controller
         $complaint->status = $request->status;
         $complaint->save();
 
-        // Log new status
         ComplaintStatusLog::create([
             'complaint_id' => $complaint->id,
             'status' => $request->status,
@@ -80,7 +77,6 @@ class ComplaintController extends Controller
             'changed_by' => auth()->id(),
         ]);
 
-        // Send status update email
         Mail::to($complaint->user->email)->send(new ComplaintStatusUpdated($complaint, $request->status));
 
         return back()->with('success', 'Complaint status updated and user notified.');
@@ -119,5 +115,27 @@ class ComplaintController extends Controller
     {
         $complaint = Complaint::with('user')->findOrFail($id);
         return view('admin.complaint-details', compact('complaint'));
+    }
+
+    // 👀 Track Complaint Form
+    public function trackForm()
+    {
+        return view('complaints.track-form');
+    }
+
+    // 🔍 Track Complaint Search
+    public function track(Request $request)
+    {
+        $request->validate([
+            'issue_id' => 'required'
+        ]);
+
+        $complaint = Complaint::with('statusLogs')->where('issue_id', $request->issue_id)->first();
+
+        if (!$complaint) {
+            return redirect()->back()->with('error', 'Complaint not found.');
+        }
+
+        return view('complaints.track-result', compact('complaint'));
     }
 }

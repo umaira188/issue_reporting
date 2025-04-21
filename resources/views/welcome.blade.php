@@ -37,7 +37,8 @@
         </p>
         <div class="button-container">
             <a href="{{ route('register') }}" class="btn">Lodge a Complaint</a> 
-            <a href="{{ url('/track-complaint') }}" class="btn">Track a Complaint</a>
+            <a href="{{ route('complaint.track.form') }}" class="btn">Track a Complaint</a>
+
         </div>
     </main>
 
