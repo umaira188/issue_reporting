@@ -60,6 +60,10 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/admin/complaints/{id}/update-status', [\App\Http\Controllers\ComplaintController::class, 'updateStatus'])->name('admin.update-status');
     Route::get('/admin/complaints/{id}', [ComplaintController::class, 'show'])->name('admin.complaints.show');
 
+    Route::get('/admin/env-police', [ComplaintController::class, 'envPoliceDashboard'])->name('admin.env');
+    Route::get('/admin/division-office', [ComplaintController::class, 'divisionOfficeDashboard'])->name('admin.division');
+    Route::get('/admin/municipal', [ComplaintController::class, 'municipalDashboard'])->name('admin.municipal');
+
 
 });
 
@@ -69,6 +73,8 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+
+
 
 // ---------------------------
 // Laravel Breeze Auth Routes

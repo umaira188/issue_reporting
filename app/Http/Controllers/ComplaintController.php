@@ -91,29 +91,10 @@ class ComplaintController extends Controller
         return view('complaint-history', compact('complaints'));
     }
 
-    // 🏢 Admin Dashboards
-    public function envPoliceDashboard()
-    {
-        $complaints = Complaint::where('category', 'garbage')->get();
-        return view('admin.env', compact('complaints'));
-    }
-
-    public function municipalDashboard()
-    {
-        $complaints = Complaint::whereIn('category', ['road', 'lighting'])->get();
-        return view('admin.municipal', compact('complaints'));
-    }
-
-    public function divisionOfficeDashboard()
-    {
-        $complaints = Complaint::whereIn('category', ['water', 'garbage'])->get();
-        return view('admin.division', compact('complaints'));
-    }
-
     // 🕵️ Admin views complaint detail
     public function show($id)
     {
-        $complaint = Complaint::with('user')->findOrFail($id);
+        $complaint = Complaint::with('user', 'statusLogs')->findOrFail($id);
         return view('admin.complaint-details', compact('complaint'));
     }
 
@@ -137,5 +118,68 @@ class ComplaintController extends Controller
         }
 
         return view('complaints.track-result', compact('complaint'));
+    }
+
+    // 🧑‍💼 Environmental Police Dashboard with Filters
+    public function envPoliceDashboard(Request $request)
+    {
+        $query = Complaint::query()->where('category', 'garbage');
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('from_date')) {
+            $query->whereDate('created_at', '>=', $request->from_date);
+        }
+
+        if ($request->filled('to_date')) {
+            $query->whereDate('created_at', '<=', $request->to_date);
+        }
+
+        $complaints = $query->latest()->get();
+        return view('admin.env', compact('complaints'));
+    }
+
+    // 🏢 Municipal Council Dashboard with Filters
+    public function municipalDashboard(Request $request)
+    {
+        $query = Complaint::query()->whereIn('category', ['road', 'lighting']);
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('from_date')) {
+            $query->whereDate('created_at', '>=', $request->from_date);
+        }
+
+        if ($request->filled('to_date')) {
+            $query->whereDate('created_at', '<=', $request->to_date);
+        }
+
+        $complaints = $query->latest()->get();
+        return view('admin.municipal', compact('complaints'));
+    }
+
+    // 🏢 Division Office Dashboard with Filters
+    public function divisionOfficeDashboard(Request $request)
+    {
+        $query = Complaint::query()->whereIn('category', ['water', 'garbage']);
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->filled('from_date')) {
+            $query->whereDate('created_at', '>=', $request->from_date);
+        }
+
+        if ($request->filled('to_date')) {
+            $query->whereDate('created_at', '<=', $request->to_date);
+        }
+
+        $complaints = $query->latest()->get();
+        return view('admin.division', compact('complaints'));
     }
 }
