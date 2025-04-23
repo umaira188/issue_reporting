@@ -13,7 +13,7 @@ class Complaint extends Model
         'issue_id',
         'user_id',
         'category',
-        'department', // Optional: if you're using this
+        'department', 
         'address',
         'details',
         'image',

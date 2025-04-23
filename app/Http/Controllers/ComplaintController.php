@@ -34,7 +34,7 @@ class ComplaintController extends Controller
         $issueId = $prefix . '-' . strtoupper(Str::random(4)) . '-' . now()->format('His');
 
         $imagePath = $request->hasFile('image')
-            ? $request->file('image')->store('complaints', 'public')
+            ?$request->file('image')->store('complaints', 'public')
             : null;
 
         $complaint = Complaint::create([
