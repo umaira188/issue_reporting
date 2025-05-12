@@ -6,77 +6,66 @@ use App\Http\Controllers\ComplaintController;
 use App\Http\Controllers\AdminManagementController;
 use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\LanguageController;
 
-// ---------------------------
-// Public Routes (Guest)
-// ---------------------------
+// 🌐 Language Switch
+Route::get('/lang/{lang}', [LanguageController::class, 'switchLang'])->name('lang.switch');
+
+// 🌍 Public Routes
 Route::get('/', fn() => view('welcome'))->name('welcome');
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', fn() => view('auth.login'))->name('login');
     Route::get('/register', fn() => view('auth.register'))->name('register');
 });
-Route::get('/track-complaint', [\App\Http\Controllers\ComplaintController::class, 'trackForm'])->name('complaint.track.form');
-Route::post('/track-complaint', [\App\Http\Controllers\ComplaintController::class, 'track'])->name('complaint.track');
 
+Route::get('/track-complaint', [ComplaintController::class, 'trackForm'])->name('complaint.track.form');
+Route::post('/track-complaint', [ComplaintController::class, 'track'])->name('complaint.track');
 
-// ---------------------------
-// Authenticated Routes
-// ---------------------------
+// 🔐 Authenticated User Routes
 Route::middleware(['auth'])->group(function () {
 
-    // 📝 Complaint Routes
+    // 📝 Complaint
     Route::get('/lodge-complaint', fn() => view('lodge-complaint'))->name('lodge-complaint');
     Route::post('/submit-complaint', [ComplaintController::class, 'store'])->name('submit-complaint');
     Route::get('/complaint-history', [ComplaintController::class, 'history'])->name('complaint.history');
 
-    // 💬 Feedback Routes
+    // 💬 Feedback
     Route::get('/feedback', fn() => view('feedback'))->name('feedback');
     Route::post('/feedback', [FeedbackController::class, 'store'])->name('feedback.submit');
 
-    // 🧑‍💼 Department Admin Dashboards
+    // 🏢 Department Dashboards
     Route::get('/admin/env-police', [ComplaintController::class, 'envPoliceDashboard'])->name('admin.env');
     Route::get('/admin/municipal', [ComplaintController::class, 'municipalDashboard'])->name('admin.municipal');
     Route::get('/admin/division-office', [ComplaintController::class, 'divisionOfficeDashboard'])->name('admin.division');
 
-    // 👑 Super Admin Routes
+    // 👑 Super Admin Panel
     Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/manage', [AdminManagementController::class, 'index'])->name('manage');
-        Route::post('/create', [AdminManagementController::class, 'store'])->name('create');
+        Route::post('/create', [AdminManagementController::class, 'store'])->name('store'); // admin.store
         Route::get('/{id}/edit', [AdminManagementController::class, 'edit'])->name('edit');
         Route::put('/{id}', [AdminManagementController::class, 'update'])->name('update');
-        Route::delete('/{id}', [AdminManagementController::class, 'destroy'])->name('delete');
+        Route::delete('/{id}', [AdminManagementController::class, 'destroy'])->name('delete'); // admin.delete
 
-        // View all complaints & feedbacks
+        // 📋 All complaints and feedback
         Route::get('/all-complaints', [AdminController::class, 'allComplaints'])->name('all-complaints');
         Route::get('/all-feedbacks', [AdminController::class, 'allFeedbacks'])->name('all-feedbacks');
     });
 
-    // 👤 Profile Management
+    // 👤 Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::put('/admin/complaints/{id}/update-status', [\App\Http\Controllers\ComplaintController::class, 'updateStatus'])->name('admin.update-status');
+    // 🔄 Complaint status updates & view
+    Route::put('/admin/complaints/{id}/update-status', [ComplaintController::class, 'updateStatus'])->name('admin.update-status');
     Route::get('/admin/complaints/{id}', [ComplaintController::class, 'show'])->name('admin.complaints.show');
-
-    Route::get('/admin/env-police', [ComplaintController::class, 'envPoliceDashboard'])->name('admin.env');
-    Route::get('/admin/division-office', [ComplaintController::class, 'divisionOfficeDashboard'])->name('admin.division');
-    Route::get('/admin/municipal', [ComplaintController::class, 'municipalDashboard'])->name('admin.municipal');
-
-
 });
 
-// ---------------------------
-// Breeze Default Dashboard
-// ---------------------------
+// 🧭 Default Dashboard (Laravel Breeze)
 Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
 
-
-
-// ---------------------------
-// Laravel Breeze Auth Routes
-// ---------------------------
+// 🛡 Breeze Auth Routes
 require __DIR__.'/auth.php';

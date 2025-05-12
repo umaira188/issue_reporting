@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Profile') }}
+             {{ __('messages.profile') }}
         </h2>
     </x-slot>
 
@@ -27,16 +27,17 @@
                         @include('profile.partials.delete-user-form')
                     </div>
                 </div>
-            @else
-                {{-- 🚫 Block access for admins --}}
-                <div class="p-4 sm:p-8 bg-yellow-100 text-yellow-800 shadow sm:rounded-lg">
-                    <div class="max-w-xl">
-                        <p class="font-semibold mb-2">Access Restricted</p>
-                        <p>You are logged in as <strong>{{ Auth::user()->role }}</strong>.</p>
-                        <p>Profile updates, password changes, and account deletion are disabled for your role.</p>
-                    </div>
-                </div>
-            @endif
+          @else
+    {{-- 🚫 Block access for admins --}}
+    <div class="p-4 sm:p-8 bg-yellow-100 text-yellow-800 shadow sm:rounded-lg">
+        <div class="max-w-xl">
+            <p class="font-semibold mb-2">{{ __('messages.access_restricted') }}</p>
+            <p>{{ __('messages.logged_in_as') }} <strong>{{ Auth::user()->role }}</strong>.</p>
+            <p>{{ __('messages.profile_disabled') }}</p>
+        </div>
+    </div>
+@endif
+
 
         </div>
     </div>
