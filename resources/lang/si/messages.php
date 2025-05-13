@@ -78,6 +78,8 @@ return [
     'feedback_placeholder' => 'ඔබේ ප්‍රතිචාර මෙහි ලියන්න...',
     'feedback_note' => 'කරුණාකර ඔබ තෝරාගත් භාෂාවෙන් ඔබගේ අදහස් ටයිප් කරන්න.',
     'send_feedback' => 'ප්‍රතිචාර යවන්න',
+    'feedback_success' => 'ඔබගේ ප්‍රතිචාරයට ස්තුතියි!',
+
 
     //profile.blade.php
     //Update Profile

@@ -79,6 +79,8 @@ return [
     'feedback_placeholder' => 'உங்கள் கருத்தை இங்கே எழுதுங்கள்...',
     'feedback_note' => 'தயவுசெய்து தேர்ந்தெடுத்த மொழியில் உங்கள் கருத்தை உள்ளிடவும்.',
     'send_feedback' => 'கருத்துகளை அனுப்பு',
+    'feedback_success' => 'உங்கள் கருத்துக்கு நன்றி!',
+
 
     //profile.blade.php
     //Update Profile

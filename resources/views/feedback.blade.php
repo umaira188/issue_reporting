@@ -7,7 +7,8 @@
 
     <div class="py-12 px-6">
         @if(session('success'))
-            <div class="text-green-600 mb-2">{{ session('success') }}</div>
+            <div class="text-green-600 mb-2">{{ __(session('success')) }}
+   </div>
         @endif
 
         <form method="POST" action="{{ route('feedback.submit') }}">
