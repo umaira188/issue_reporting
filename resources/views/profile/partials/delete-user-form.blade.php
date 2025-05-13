@@ -1,10 +1,24 @@
 <section class="space-y-6">
     <header>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 7f40251 (Resolved merge conflicts and added frontend updates)
         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
             {{ __('messages.delete_account') }}
         </h2>
 
         <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+<<<<<<< HEAD
+=======
+=======
+        <h2 class="text-lg font-medium text-gray-900 dark:text-black">
+            {{ __('messages.delete_account') }}
+        </h2>
+
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-700">
+>>>>>>> 341b4f5 (Frontend updates and layout improvements)
+>>>>>>> 7f40251 (Resolved merge conflicts and added frontend updates)
             {{ __('messages.delete_account_note') }}
         </p>
     </header>

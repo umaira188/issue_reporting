@@ -4,8 +4,13 @@
             {{ __('messages.env_dashboard') }}
         </h2>
     </x-slot>
+<<<<<<< HEAD
 
     <div class="p-6 bg-white dark:bg-gray-800 rounded shadow">
+=======
+ <div class="py-12 px-6 bg-white text-black rounded shadow-md">
+    <div class="p-6 bg-white dark:bg-gray-300 rounded shadow">
+>>>>>>> 7f40251 (Resolved merge conflicts and added frontend updates)
 
         {{-- ✅ Filter Form --}}
         <form method="GET" class="mb-6 flex flex-wrap gap-4 items-end">
@@ -32,7 +37,15 @@
             </div>
 
             <div>
+<<<<<<< HEAD
                 <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
+=======
+<<<<<<< HEAD
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">
+=======
+                <button type="submit" class="bg-green-800 text-white px-4 py-2 rounded">
+>>>>>>> 341b4f5 (Frontend updates and layout improvements)
+>>>>>>> 7f40251 (Resolved merge conflicts and added frontend updates)
                     {{ __('messages.filter') }}
                 </button>
                 <a href="{{ route('admin.env') }}" class="ml-2 text-sm text-gray-500">
@@ -55,7 +68,15 @@
                 <p class="mt-1 text-sm text-gray-700">{{ $complaint->details }}</p>
 
                 {{-- 🔍 View Details --}}
+<<<<<<< HEAD
                 <a href="{{ route('admin.complaints.show', $complaint->id) }}" class="text-blue-600 hover:underline text-sm mt-2 inline-block">
+=======
+<<<<<<< HEAD
+                <a href="{{ route('admin.complaints.show', $complaint->id) }}" class="text-blue-600 hover:underline text-sm mt-2 inline-block">
+=======
+                <a href="{{ route('admin.complaints.show', $complaint->id) }}" class="text-green-800 hover:underline text-sm mt-2 inline-block">
+>>>>>>> 341b4f5 (Frontend updates and layout improvements)
+>>>>>>> 7f40251 (Resolved merge conflicts and added frontend updates)
                     {{ __('messages.view_details') }}
                 </a>
 
@@ -73,7 +94,15 @@
                             @endforeach
                         </select>
 
+<<<<<<< HEAD
                         <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded">
+=======
+<<<<<<< HEAD
+                        <button type="submit" class="bg-blue-500 text-white px-3 py-1 rounded">
+=======
+                        <button type="submit" class="bg-green-800 text-white px-3 py-1 rounded">
+>>>>>>> 341b4f5 (Frontend updates and layout improvements)
+>>>>>>> 7f40251 (Resolved merge conflicts and added frontend updates)
                             {{ __('messages.update') }}
                         </button>
                     </div>

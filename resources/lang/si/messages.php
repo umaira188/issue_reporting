@@ -78,8 +78,16 @@ return [
     'feedback_placeholder' => 'ඔබේ ප්‍රතිචාර මෙහි ලියන්න...',
     'feedback_note' => 'කරුණාකර ඔබ තෝරාගත් භාෂාවෙන් ඔබගේ අදහස් ටයිප් කරන්න.',
     'send_feedback' => 'ප්‍රතිචාර යවන්න',
+<<<<<<< HEAD
     'feedback_success' => 'ඔබගේ ප්‍රතිචාරයට ස්තුතියි!',
 
+=======
+<<<<<<< HEAD
+    'feedback_success' => 'ඔබගේ ප්‍රතිචාරයට ස්තුතියි!',
+
+=======
+>>>>>>> 341b4f5 (Frontend updates and layout improvements)
+>>>>>>> 7f40251 (Resolved merge conflicts and added frontend updates)
 
     //profile.blade.php
     //Update Profile

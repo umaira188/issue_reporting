@@ -1,4 +1,8 @@
 <x-app-layout> 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> 7f40251 (Resolved merge conflicts and added frontend updates)
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('messages.complaint_history') }}
@@ -8,6 +12,16 @@
     <div class="py-12 px-6">
         @forelse($complaints as $complaint)
             <div class="mb-6 p-4 border rounded bg-white dark:bg-gray-800 shadow">
+<<<<<<< HEAD
+=======
+=======
+     
+ <div class="py-12 px-6 bg-white text-black rounded shadow-md">
+    <div class="py-12 px-6 bg-white text-black">
+        @forelse($complaints as $complaint)
+            <div class="mb-6 p-4 border rounded bg-green shadow">
+>>>>>>> 341b4f5 (Frontend updates and layout improvements)
+>>>>>>> 7f40251 (Resolved merge conflicts and added frontend updates)
                 <h3 class="font-semibold text-lg mb-2">{{ __('messages.issue_id') }}: {{ $complaint->issue_id }}</h3>
                 <p><strong>{{ __('messages.category') }}:</strong> {{ __('messages.categories.' . $complaint->category) }}</p>
                 <p><strong>{{ __('messages.current_status') }}:</strong> 
@@ -34,7 +48,15 @@
                 </ul>
             </div>
         @empty
+<<<<<<< HEAD
             <p class="text-gray-600 dark:text-gray-300">{{ __('messages.no_complaints') }}</p>
+=======
+<<<<<<< HEAD
+            <p class="text-gray-600 dark:text-gray-300">{{ __('messages.no_complaints') }}</p>
+=======
+            <p class="text-gray-600">{{ __('messages.no_complaints') }}</p>
+>>>>>>> 341b4f5 (Frontend updates and layout improvements)
+>>>>>>> 7f40251 (Resolved merge conflicts and added frontend updates)
         @endforelse
     </div>
 </x-app-layout>

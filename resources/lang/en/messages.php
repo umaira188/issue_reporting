@@ -77,8 +77,16 @@ return [
     'feedback_placeholder' => 'Write your feedback here...',
      'feedback_note' => 'Please type your feedback in your selected language.',
     'send_feedback' => 'Send Feedback',
+<<<<<<< HEAD
      'feedback_success' => 'Thank you for your feedback!',
 
+=======
+<<<<<<< HEAD
+     'feedback_success' => 'Thank you for your feedback!',
+
+=======
+>>>>>>> 341b4f5 (Frontend updates and layout improvements)
+>>>>>>> 7f40251 (Resolved merge conflicts and added frontend updates)
 
     //profile.blade.php
       //Update Profile

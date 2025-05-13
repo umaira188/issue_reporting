@@ -17,7 +17,11 @@ body {
     top: 0;
     width: 100%;
     z-index: 50;
+<<<<<<< HEAD
     overflow: hidden;
+=======
+    overflow: visible;
+>>>>>>> 7f40251 (Resolved merge conflicts and added frontend updates)
 }
 
 .logo-container {
@@ -77,13 +81,23 @@ nav {
     display: flex;
     gap: 12px; /* space-x-3 */
     color: #facc15; /* text-yellow-300 */
+<<<<<<< HEAD
     font-size: 1rem; /* Reduced font size for language options */
+=======
+    font-size: 1rem;
+     /* Reduced font size for language options */
+>>>>>>> 7f40251 (Resolved merge conflicts and added frontend updates)
 }
 
 .language-selector {
     display: flex; /* Equivalent to 'flex' */
 }
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 7f40251 (Resolved merge conflicts and added frontend updates)
 .language {
     margin-right: 10px; /* Equivalent to 'space-x-3' (assuming 3 * 4px = 12px) */
     color: #facc15; /* Equivalent to 'text-yellow-300' */
@@ -513,3 +527,6 @@ button {
   }
 
 /*Track the Complain page*/
+
+
+
